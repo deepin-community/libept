@@ -1,0 +1,25 @@
+#!/usr/bin/make -f
+
+BUILDDIR = $(CURDIR)/debian/build
+
+%:
+	dh $@ --buildsystem=cmake --builddirectory=$(BUILDDIR)
+
+override_dh_fixperms:
+	dh_fixperms
+	test -e /usr/bin/dh_buildinfo && dh_buildinfo
+
+override_dh_auto_build:
+	dh_auto_build
+	make -C $(BUILDDIR) check
+	make -C $(BUILDDIR) doc
+
+override_dh_auto_install:
+	dh_auto_install
+	dh_installdocs -plibept-dev -n $(BUILDDIR)/doc/html
+	dh_installdocs -plibept-dev -n $(BUILDDIR)/doc/libept.doxytags
+
+debsrc:
+	debian/check_versions
+	gbp buildpackage --git-pristine-tar -S -us -uc
+

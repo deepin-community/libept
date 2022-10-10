@@ -1,0 +1,3 @@
+# Do not remove the APT library version or the next APT ABI break
+# will produce a libept package with old name, but new library inside.
+debian/tmp/usr/lib/*/libept.so.1.aptpkg6.0
